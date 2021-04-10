@@ -15,4 +15,12 @@ not recommended to change
 set True if you want to reset(erase) db and make a new one
 
 ## usage
-python main.py [options]
+python main.py [options]  
+-> the public.bitmex.com shows up.  
+-> if you see the list of csv.gz files on the webpage, click "yes"  
+-> the download starts  
+
+## tips
+1. when initializing the DB, it can take long (like 10~15 hours)    
+2. due to crawling restrictions, the download gets slower and slower. it's normal, but it can be faster if you just pause (shut down) and resume (rerun) the script within 30min~1 hrs.  
+3. enjoy
