@@ -22,7 +22,7 @@ python main.py [options]
 -> if you see the list of csv.gz files on the webpage, click "yes"  
 -> the download starts  
 
-## quary
+## query
 1. the table names are formatted as: SYMBOL_TIMEFRAME
 2. Available TIMEFRAME are TICK, and what you have specified in option --timeframes
 3. Available SYMBOL are in table TICKERS
