@@ -27,6 +27,23 @@ python main.py [options]
 2. Available TIMEFRAME are TICK, and what you have specified in option --timeframes
 3. Available SYMBOL are in table TICKERS
 
+```python
+def load_bitmex_data(db_path, timeframe, symbol):
+    db = sqlite3.connect(db_path)
+
+    if timeframe == "TICK":
+        columns = ["timestamp", "symbol", "side", "size", "price", "tickDirection", "trdMatchID", "grossValue", "homeNotional", "foreignNotional"]
+    else:
+        columns = ["timestamp", "open", "high", "low", "close", "volume", "lowFirst"]
+        
+    df = pd.DataFrame(db.execute(f"SELECT * FROM {symbol}_{timeframe}"), columns=columns)
+    df.index = pd.to_datetime(df["timestamp"])
+
+    return df
+
+df = load_bitmex_data("/home/ych/Storage/bitmex.db", "1T", "XBTUSD") # loads XBTUSD_1T table which has 1min candlesticks of XBTUSD
+```
+
 ## tips
 1. when initializing the DB, it can take long (like 10~15 hours)    
 2. due to crawling restrictions, the download gets slower and slower. it's normal, but it can be faster if you just pause (shut down) and resume (rerun) the script within 30min~1 hrs.  
