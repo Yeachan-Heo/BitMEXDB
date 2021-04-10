@@ -64,7 +64,7 @@ def wget_retry(*args, **kwargs):
         return wget_retry(*args, **kwargs)
 
 
-def crawl(db_path, start_date="auto", timeframes=["1T", "5T", "15T", "30T", "1H", "1D"], reset_db=False):
+def crawl(db_path, start_date="auto", timeframes=["1T", "5T", "15T", "30T", "1H", "1D"], reset_db=False, chromedriver_loc="/usr/bin/chromedriver"):
     if reset_db:
         os.system(f"rm -rf {db_path}")
 
@@ -92,7 +92,7 @@ def crawl(db_path, start_date="auto", timeframes=["1T", "5T", "15T", "30T", "1H"
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
 
-    driver = webdriver.Chrome("/usr/bin/chromedriver", options=chrome_options)
+    driver = webdriver.Chrome(chromedriver_loc, options=chrome_options)
 
     if not os.path.exists("/tmp/bitmex"):
         os.makedirs("/tmp/bitmex")
@@ -172,7 +172,6 @@ def load_bitmex_data(db_path, timeframe, symbol):
         
     df = pd.DataFrame(db.execute(f"SELECT * FROM {symbol}_{timeframe}"), columns=columns)
     df.index = pd.to_datetime(df["timestamp"])
-    del df["timestamp"]
 
     return df
 
@@ -184,10 +183,11 @@ if __name__ == '__main__':
 
     parser.add_argument("--timeframes", type=list, default=["1T", "5T", "15T", "30T", "1H", "1D"])
     parser.add_argument("--db_path", help="path to sqlite3 database", type=str, default="/home/ych/Storage/bitmex/bitmex.db")
-    parser.add_argument("--start_date", type=str, default="auto", help="start_date like 20141122, default is auto")
-    parser.add_argument("--reset_db", type=bool, default=False, help="erase the db or not")
+    parser.add_argument("--start_date", type=str, default="auto")
+    parser.add_argument("--reset_db", type=bool, default=False)
+    parser.add_argument("--chromedriver_loc", help="path to selenium chrome driver", default="/usr/bin/chromedriver")
 
     args = parser.parse_args()
 
-    crawl(args.db_path, args.start_date, args.timeframes, args.reset_db)
+    crawl(args.db_path, args.start_date, args.timeframes, args.reset_db, args.chromedriver_loc)
 
